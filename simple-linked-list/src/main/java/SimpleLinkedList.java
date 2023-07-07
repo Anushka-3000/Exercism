@@ -1,55 +1,77 @@
-import java.util.*;
+import java.util.NoSuchElementException;
+
+class SimpleList<T>{
+    private final T val;
+    private SimpleList<T> next;
+
+    public SimpleList(T val, SimpleList<T> next) {
+        this.val = val;
+        this.next = next;
+    }
+    public T getVal() {
+        return val;
+    }
+    public SimpleList<T> getNext() {
+        return next;
+    }
+    public void setNext(SimpleList<T> next) {
+        this.next = next;
+    }
+}
 
 class SimpleLinkedList<T> {
-    int head = -1;
-    List<T> collections;
+    int size = 0;
+    SimpleList<T> firstElement;
+
     SimpleLinkedList() {
-        collections = new ArrayList<T>();
+
     }
 
     SimpleLinkedList(T[] values) {
-        collections = new ArrayList<T>();
-        collections.addAll(Arrays.asList(values));
-        head += values.length;
+        for (T val : values)
+            this.push(val);
     }
 
-    void push(T value) {;
-        collections.add(value);
-        head += 1;
+    void push(T value) {
+        if(size == 0)
+            firstElement = new SimpleList<>(value, null);
+        else
+            firstElement = new SimpleList<>(value, firstElement);
+        size++;
     }
 
     T pop() {
-        if(head < 0)
+        if (size == 0)
             throw new NoSuchElementException();
-        T value = collections.get(head);
-        collections.remove(head);
-        head--;
-        return value;
+
+        SimpleList<T> element = firstElement;
+        firstElement = element.getNext();
+        element.setNext(null);
+        size--;
+        return element.getVal();
+    }
+
+    T[] asArray(Class<?> clazz) {
+        SimpleList<T> temp = firstElement;
+        T[] ret = (T[]) new Object[size];
+        int i = 0;
+        while (temp != null){
+            ret[i] = temp.getVal();
+            i++;
+            temp = temp.getNext();
+        }
+        return  ret;
     }
 
     void reverse() {
-        int start=0;
-        int end=head;
-        while(start<end)
-        {
-            T temp=collections.get(start);
-            collections.set(start,collections.get(end));
-            collections.set(end,temp);
-            start++;
-            end--;
-        }
-    }
-
-    T[] asArray(Class<T> clazz) {
-        T[] result= (T[]) new Object[collections.size()];
-        for (int i=head;i>=0;i--)
-        {
-            result[head-i]=collections.get(i);
-        }
-        return result;
+        T[] array = this.asArray(Object.class);
+        while (size > 0)
+            this.pop();
+        for (var el: array)
+            this.push(el);
     }
 
     int size() {
-        return head + 1;
+        return size;
     }
 }
