@@ -33,10 +33,10 @@ public class PythagoreanTriplet {
         return new PythagoreanTripletBuilder();
     }
     public static class PythagoreanTripletBuilder {
-        private int s;
+        private int sum;
         private Integer limit;
-        public PythagoreanTripletBuilder thatSumTo(int sum) {
-            s = sum;
+        public PythagoreanTripletBuilder thatSumTo(int s) {
+            sum = s;
             return this;
         }
         public PythagoreanTripletBuilder withFactorsLessThanOrEqualTo(int limit) {
@@ -46,20 +46,20 @@ public class PythagoreanTriplet {
         public List<PythagoreanTriplet> build() {
             int a = 1;
             int b = 0;
-            boolean next = true;
+            boolean nextTriplet = true;
             List<PythagoreanTriplet> triplets = new ArrayList<>();
-            while(next && a < s) {
-                int r1 = s * s - 2 * s * a;
-                int r2 = 2 * s - 2 * a;
-                if(r1 % r2 == 0) {
-                    b = r1 / r2;
-                    int c = s - a - b;
+            while(nextTriplet && a < sum) {
+                int result1 = sum * sum - 2 * sum * a;
+                int result2 = 2 * sum - 2 * a;
+                if(result1 % result2 == 0) {
+                    b = result1 / result2;
+                    int c = sum - a - b;
                     if((a < b && b < c)) {
                         if(Objects.isNull(limit) || (a <= limit && b <= limit && c <= limit)) {
                             triplets.add(new PythagoreanTriplet(a, b, c));
                         }
                     }else {
-                        next = false;
+                        nextTriplet = false;
                     }
                 }
                 a++;
@@ -68,4 +68,3 @@ public class PythagoreanTriplet {
         }
     }
 }
-
