@@ -1,18 +1,26 @@
-import java.util.stream.Collectors;
 class RnaTranscription {
-  private static String dnaToRna(int c) {
-    switch ((char) c) {
-      case 'G': return "C";
-      case 'C': return "G";
-      case 'T': return "A";
-      case 'A': return "U";
-      default:
-        throw new IllegalArgumentException("No mapping for {" + (char) c + "}.");
-    }
-  }
   String transcribe(String dnaStrand) {
-    return dnaStrand.chars()
-        .mapToObj(RnaTranscription::dnaToRna)
-        .collect(Collectors.joining());
+    StringBuilder rnaStrand = new StringBuilder();
+    char[] dna = dnaStrand.toCharArray();
+    for (char character : dna) {
+      switch (character) {
+        case 'G':
+          rnaStrand.append('C');
+          break;
+        case 'C':
+          rnaStrand.append('G');
+          break;
+        case 'T':
+          rnaStrand.append('A');
+          break;
+        case 'A':
+          rnaStrand.append('U');
+          break;
+        default:
+          throw new IllegalArgumentException("Invalid input");
+      }
+    }
+    return rnaStrand.toString();
   }
 }
+  
